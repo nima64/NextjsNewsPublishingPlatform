@@ -1,5 +1,5 @@
 # Nextjs News Publishing Platform
-A simple project to demonstrate CRUD using:
+A simple crud app using:
 - Nextjs
 - Typescript
 - Session based Auth
