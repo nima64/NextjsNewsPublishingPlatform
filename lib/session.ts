@@ -1,0 +1,61 @@
+import { NextApiHandler, NextApiRequest, NextApiResponse } from 'next';
+import session from 'express-session';
+import sqlite3 from 'sqlite3';
+import session_sqlite from 'express-session-sqlite';
+import exp from 'express';
+import path from 'path';
+
+const sqliteStore = session_sqlite(session);
+// console.log(`path is ${path.join(__dirname, 'test.db')}`)
+var mySession = session({
+	store: new sqliteStore({
+		driver: sqlite3.Database,
+		path: 'test.db',
+		ttl: 300000,
+		cleanupInterval: 300000
+	}),
+	secret: 'keyboard cat',
+	resave: false,
+	saveUninitialized: true
+});
+
+function runMiddleware(req: NextApiRequest, res: NextApiResponse, fn: exp.RequestHandler) {
+	return new Promise((resolve, reject) => {
+		fn(req as any, res as any, (result: any) => {
+			if (result instanceof Error) {
+				reject(result)
+			}
+			resolve(result)
+		})
+	})
+}
+
+export interface Session {
+	session: session.Session & Partial<session.SessionData>;
+	sessionID: string;
+}
+
+type NextApiRequestWithSession = NextApiRequest & Session;
+type ApiHandler = (req: NextApiRequestWithSession, res: NextApiResponse) => void;
+
+export const withSession = (handler: ApiHandler) => {
+	const fn: NextApiHandler = async (req, res) => {
+		await applySession(req, res);
+		// try {
+		// 	await runMiddleware(req, res, mySession)
+		// } catch (err) {
+		// 	console.log(err.message)
+		// }
+		return handler(req as any, res);
+	}
+	return fn;
+}
+
+export const applySession = async (req: any, res: any) => {
+	try {
+		await runMiddleware(req, res, mySession)
+	} catch (err) {
+		console.log(err.message)
+	}
+};
+

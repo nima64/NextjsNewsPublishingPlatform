@@ -1,0 +1,12 @@
+.pill {
+	display: inline-block;
+	background-color: lightgray;
+	border-radius: 15px;
+	padding: 7px;
+	margin-bottom: 4px;
+	margin-right: 6px;
+	font-size: 0.9rem;
+}
+.pill:hover {
+	background-color: #797979a6;
+}

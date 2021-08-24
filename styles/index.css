@@ -1,0 +1,79 @@
+
+.btn {
+	@apply font-bold py-2 px-4 inline-block;
+}
+
+.btn-secondary-blue{
+	@apply border border-blue-500 text-blue-500;
+}
+.btn-secondary-blue:hover {
+	@apply bg-blue-500 text-white;
+}
+.btn-blue {
+	@apply bg-blue-500 text-white;
+}
+.btn-blue:hover {
+	@apply bg-blue-600;
+}
+
+@tailwind base;
+
+/* Write your own custom base styles here */
+
+/* Start purging... */
+@layer base {
+	h1{
+		@apply text-4xl;
+	}
+	h2 {
+		@apply text-3xl;
+	}
+	h3 {
+		@apply text-2xl;
+	}
+	h4 {
+		@apply text-xl;
+	}
+};
+
+@tailwind components;
+
+
+/* Stop purging. */
+
+/* Write you own custom component styles here */
+
+/* Start purging... */
+
+@tailwind utilities;
+
+/* Stop purging. */
+
+/* Your own custom utilities */
+
+#mainArticle h1, 
+#mainArticle h2,
+#mainArticle h3,
+#mainArticle h4,
+#mainArticle h5{
+	font-weight: 500;
+	margin-top: 2rem;
+}
+
+#mainArticle p{
+	font-size: 1.1rem;
+	margin-top: 1.1rem;
+}
+#mainArticle a{
+	margin-right: 1rem;
+}
+#mainArticle ul{
+	padding-left: 2rem;
+	list-style: inherit;
+	display: flex;
+	flex-direction: column;
+}
+#mainArticle li{
+	margin-top: 0.5rem;
+}
+
