@@ -14,4 +14,5 @@ This Project Features:
 All api calls are done directly with sql (no orms),  
 most of the sql queries can be found under lib/api
 
+The data from medium.com using python aiohttp
 
