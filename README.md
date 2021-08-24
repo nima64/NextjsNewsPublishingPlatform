@@ -1,9 +1,17 @@
-# Nextjs News Publishing Platform
-A simple crud app using:
+# Nextjs Social Media Publishing Platform
+Tech Stack:
 - Nextjs
 - Typescript
-- Session based Auth
 - Reactjs
 - Tailwind CSS
-- Sqlite lite
+- SqliteLite3 
+
+This Project Features: 
+- filtering by tags ex: /tag/programming , /tag/health,science or /tag/programming,python,data science
+- basic search through title and description
+- session based auth  
+
+All api calls are done directly with sql (no orms),  
+most of the sql queries can be found under lib/api
+
 
