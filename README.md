@@ -16,3 +16,4 @@ most of the sql queries can be found under lib/api
 
 The data from medium.com using python aiohttp
 
+![alt text](https://github.com/nima64/NextjsNewsPublishingPlatform/blob/main/Screenshot%20from%202021-08-24%2022-21-26.png)
