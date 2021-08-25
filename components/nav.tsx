@@ -64,12 +64,13 @@ function Sidebar ({ user, signoutH, signinH }: SidebarProps) {
             {"Log in"}
           </button>
           {/* <a className="rounded-lg btn text-blue-500 hover:bg-blue-100 mr-1" href="/login">{"Log in"}</a> */}
-          <button
+          <a
+            href="/signup"
             className="rounded-lg btn btn-secondary-blue"
             onClick={signoutH}
           >
             {"Sign Up"}
-          </button>
+          </a>
         </>
       )}
     </>

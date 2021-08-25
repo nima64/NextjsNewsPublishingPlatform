@@ -6,17 +6,17 @@ import User from "../../types/user";
 import { useRef } from "react";
 var he = require('he');
 
-const CreateComment = ({postID}:any) => {
+const CreateComment = ({ postID }: any) => {
 	let textAreaRef = useRef<HTMLTextAreaElement>(null);
 
 	let submit = () => {
-		fetch('/api/comment',{
+		fetch('/api/comment', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
 			},
-			body: JSON.stringify({ postID: postID, comment: textAreaRef.current?.value})
-		})
+			body: JSON.stringify({ postID: postID, comment: textAreaRef.current?.value })
+		}).then(res => { if (res.status == 200) window.location.href = `/post/${postID}` })
 	}
 
 	return (
@@ -54,9 +54,9 @@ const Post = ({ post, user, comments }: { post?: PostType; user?: User; comments
 						post && <div dangerouslySetInnerHTML={{ __html: he.decode(post.content) }}></div>
 					}
 				</article>
-				<div className="bg-indigo-200 rounded-md px-6 py-6 mt-8">
+				<div id="comments" className="bg-indigo-200 rounded-md px-6 py-6 mt-8">
 
-					<CreateComment postID={post?.postID}/>
+					<CreateComment postID={post?.postID} />
 					<h3 className="font-medium">Comments</h3>
 					<ul>
 						{

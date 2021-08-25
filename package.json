@@ -7,6 +7,7 @@
     "typecheck": "tsc"
   },
   "dependencies": {
+    "@tailwindcss/forms": "^0.3.3",
     "@tailwindcss/jit": "^0.1.18",
     "@types/sqlite3": "^3.1.7",
     "bootstrap": "^5.0.0-beta3",

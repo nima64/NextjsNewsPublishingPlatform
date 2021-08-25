@@ -3,7 +3,7 @@ import db from '../../lib/db';
 import { getPromise } from '../../lib/db';
 import User from '../../types/user';
 
-async function validate_user(username: string, password: string) {
+async function validate_user (username: string, password: string) {
 	if (username && password) {
 		let row: any = await getPromise(`select * from user where username = '${username}' and password = '${password}'`);
 		if (!row)
@@ -36,7 +36,6 @@ export default withSession(async (req, res) => {
 	}
 	console.log(`logged user ${user.userID}`)
 	session.user = user;
-	session.userID = user.userID;
 
 	return res.send(JSON.stringify(`user is now logged in`));
 });

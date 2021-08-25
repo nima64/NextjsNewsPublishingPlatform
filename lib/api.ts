@@ -75,7 +75,7 @@ export async function getAllPosts (user?: User) {
 
 		if (user) {
 			let posts_userlikes_likes_comments = `
-				SELECT * FROM post_like_comment plc
+				SELECT plc.*, b.liked_by_me FROM post_like_comment plc
 				LEFT JOIN
 				(select postID, userID as liked_by_me
 					from "like" 
