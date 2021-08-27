@@ -30,6 +30,7 @@ const Index = ({ allPosts, user }: { allPosts: PostType[], user: User }) => {
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   let user = await getUser(req, res) as User;
   let posts = await getAllPosts(user);
+
   return {
     props: {
       allPosts: posts,

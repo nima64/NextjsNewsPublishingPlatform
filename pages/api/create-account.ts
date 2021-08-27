@@ -21,7 +21,7 @@ export default withSession(async (req, res) => {
 	if (req.method == 'GET') return res.status(403).send('only post requests allowed');
 
 	let { username, password, email } = req.body;
-
+	console.log(req.body);
 	if (username && password && email) {
 		let user = await getPromise('select * from user where email=? or username=?', [email, username]);
 		if (user) {

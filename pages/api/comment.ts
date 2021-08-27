@@ -11,11 +11,11 @@ export default withSession(async (req, res) => {
 				let userID = session.user.userID;
 				let postID = req.body.postID;
 				let comment = req.body.comment;
-				await runPromise(`insert into comment (userID, postID, content) values ($userID, $postID, $content)`, {
-					$userID: userID,
-					$postID: postID,
-					$content: comment
-				});
+				await runPromise(`insert into comment (userID, postID, content) values (?, ?, ?)`, [
+					userID,
+					postID,
+					comment
+				]);
 				return res.send('');
 			} catch (err) {
 				console.log(err)

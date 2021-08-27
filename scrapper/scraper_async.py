@@ -126,7 +126,7 @@ async def getArticles(reqlist):
 
 start_time = time.time()
 
-tagt = 'health'
+tagt = 'programming'
 
 reqlist = [
     (tagt, 2015),

@@ -1,25 +1,30 @@
 import { NextApiHandler, NextApiRequest, NextApiResponse } from 'next';
 import session from 'express-session';
-import sqlite3 from 'sqlite3';
-import session_sqlite from 'express-session-sqlite';
+// import sqlite3 from 'sqlite3';
+// import session_sqlite from 'express-session-sqlite';
 import exp from 'express';
 import path from 'path';
+import db from './db';
 
-const sqliteStore = session_sqlite(session);
+var MySQLStore = require('express-mysql-session')(session)
+
+let options = {
+	host: 'maria-database.czhqi7oxesf3.us-west-1.rds.amazonaws.com',
+	port: 3306,
+	user: 'dbuser',
+	password: 'Kenneth12',
+	database: 'blogpub'
+};
+
 // console.log(`path is ${path.join(__dirname, 'test.db')}`)
 var mySession = session({
-	store: new sqliteStore({
-		driver: sqlite3.Database,
-		path: 'test.db',
-		ttl: 300000,
-		cleanupInterval: 300000
-	}),
+	store: new MySQLStore({}, db),
 	secret: 'keyboard cat',
 	resave: false,
 	saveUninitialized: true
 });
 
-function runMiddleware(req: NextApiRequest, res: NextApiResponse, fn: exp.RequestHandler) {
+function runMiddleware (req: NextApiRequest, res: NextApiResponse, fn: exp.RequestHandler) {
 	return new Promise((resolve, reject) => {
 		fn(req as any, res as any, (result: any) => {
 			if (result instanceof Error) {

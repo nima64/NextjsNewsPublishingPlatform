@@ -1,6 +1,5 @@
 import User from '../types/user';
-import db, { getPromise } from './db';
-import { getAllPromise } from './db';
+import db, { getPromise, getAllPromise, runPromise } from './db';
 
 export async function getPostsByTitle (title: string) {
 	let posts: any[] = [];
@@ -17,53 +16,45 @@ export async function getPostsByTitle (title: string) {
 }
 
 export async function getPostsByTag (tags_str: string) {
-	return new Promise((resolve, reject) => {
-		let posts: any = [];
+	return new Promise(async (resolve, reject) => {
+		let posts = null;
 		let tags: string[] = tags_str.split(',');
 
 		if (tags) {
 			// converts math,science,health to ('math'),('science'),('health')
-			let tags_sql: string = tags.map((tag: string) => `('${tag.toLowerCase()}')`).join(',');
+			// let tags_sql: string = tags.map((tag: string) => `('${tag.toLowerCase()}')`).join(',');
+			let tags_sql = tags.map((tag: string) => [tag]);
 			try {
-				db.serialize(() => {
-					db.run('create TEMP table tag  (tag text not null)', (err: Error) => {
-						if (err)
-							reject(`error ${err.message}`);
-					});
-					db.run(`insert into temp.tag (tag) values ${tags_sql}`);
-					db.each(`
-						with combined_user_tags as (
-						select group_concat(tag) 
-						from (
-							select *
-							from temp.tag
-							order by tag asc
-						)),
-						-- get posts which have tags from temptags
+				let run_queries = async () => {
+					await runPromise('create TEMPORARY TABLE IF NOT EXISTS temptag (tag text not null)');
+					await runPromise(`insert into temptag (tag) values ?`, [tags_sql])
+					posts = await getAllPromise(`
+						WITH combined_user_tags AS (
+							SELECT group_concat(t.tag ORDER BY t.tag DESC) 
+							FROM temptag t 
+						),
+						-- get posts which have tags from temptag
 						filtered_posts as (
-							select t.postID,group_concat(t.tag) as combined_tags 
-								from tags t
-							inner join temp.tag tt
-							where lower(t.tag) = lower(tt.tag)
+							select t.postID,group_concat(t.tag ORDER BY t.tag DESC) as combined_tags 
+							from tags t
+							inner join temptag tt
+							ON lower(t.tag) = lower(tt.tag)
 							group by t.postID
-							-- check if post contains all tags from temptags
+							-- check if post contains all tags from temptag
 							having lower(combined_tags) = lower((select * from combined_user_tags))
 						)
 						select * from filtered_posts fp
 						natural join
 						post_like_comment 
-					`, (err: Error, row: any) => {
-						if (!err)
-							posts.push(row);
-					});
-					db.run('drop table temp.tag', (err: Error) => {
-						if (!err)
-							resolve(posts);
-					})
-				});
+						limit 10
+					`);
+					await runPromise('DROP TEMPORARY TABLE IF EXISTS temptag');
+					if (!(posts instanceof Error)) resolve(posts.rows);
+				};
+				await run_queries();
 			} catch (err) {
 				console.log(err);
-				reject(err);
+				reject([]);
 			}
 		}
 	})
@@ -78,12 +69,12 @@ export async function getAllPosts (user?: User) {
 				SELECT plc.*, b.liked_by_me FROM post_like_comment plc
 				LEFT JOIN
 				(select postID, userID as liked_by_me
-					from "like" 
+					from likes 
 					where userID = ${user.userID}
 				) b
 				ON plc.postID = b.postID
+				limit 10
 			`;
-			// result = await getAllPromise(`select * from posts p left outer join (select * from "like" lz where lz.userID = ${user.userID}) l on p.postID = l.postID limit 20`);
 			result = await getAllPromise(posts_userlikes_likes_comments);
 		} else {
 			result = await getAllPromise(`select * from post_like_comment`);

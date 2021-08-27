@@ -96,6 +96,7 @@ export async function getServerSideProps ({ params, req, res }: any) {
 		let comment_result = await getAllPromise(comments_query);
 		post = post_result instanceof (Error) ? post : post_result;
 		comment = comment_result instanceof (Error) ? comment : comment_result.rows;
+		console.log(comment)
 	} catch (err) {
 		console.log(err)
 	}
