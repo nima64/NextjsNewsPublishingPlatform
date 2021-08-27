@@ -5,26 +5,21 @@ var sqlstring = require('sqlstring')
 let con: mysql.Connection | null = null;
 
 let options = {
-	host: 'maria-database.czhqi7oxesf3.us-west-1.rds.amazonaws.com',
+	host: process.env.DB_HOST,
+	user: process.env.DB_USER,
+	password: process.env.DB_PASS,
 	port: 3306,
-	user: 'dbuser',
-	password: 'Kenneth12',
 	database: 'blogpub'
 };
 
-if (process.env.NODE_ENV !== 'production') {
-	let gb: any = global;
-	if (!gb.dbconnection) {
-		let db = mysql.createConnection(options);
-		// let db = new sqlite3.Database('test.db', (err) => {
-		// 	if (err)
-		// 		console.log(err.message)
-		// 	console.log(`connected to sqlite3`);
-		// });
-		gb.dbconnection = db;
-	}
-	con = gb.dbconnection;
+// // if (process.env.NODE_ENV !== 'test') {
+let gb: any = global;
+if (!gb.dbconnection) {
+	let db = mysql.createConnection(options);
+	gb.dbconnection = db;
 }
+con = gb.dbconnection;
+// }
 
 function queryPromise (sql_query: string, params: any[] = []) {
 	return new Promise((resolve, reject) => {
