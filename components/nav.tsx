@@ -23,7 +23,7 @@ function LinkList ({ links }: { links: Link[] }) {
 }
 
 const apiSearchByTitle = async (title: string = "", tag: string = "") => {
-  let posts = await fetch(`http://localhost:3000/api/search?title=${title}`)
+  let posts = await fetch(`/api/search?title=${title}`)
     .then((response) => response.json())
     .then((posts) => {
       return posts;

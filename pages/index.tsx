@@ -1,6 +1,4 @@
 import { getAllPosts } from '../lib/api';
-import Nav from '../components/nav'
-import Pills from '../components/pills';
 import PostType from '../types/post';
 import { GetServerSideProps } from 'next';
 import { getUser } from '../lib/auth';

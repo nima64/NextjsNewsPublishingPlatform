@@ -1,7 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getPostsByTag, getPostsByTitle } from '../../lib/api';
-import db from '../../lib/db';
-import { getAllPromise } from '../../lib/db';
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
 	if (req.query.title) {
