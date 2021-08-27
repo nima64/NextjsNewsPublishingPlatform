@@ -1,4 +1,6 @@
-# Nextjs Social Media Publishing Platform
+# Nextjs Social Media Publishing Platform  
+[See it live here](https://blog-pub-gn8xgxbor-rintarouokabe12-gmailcom.vercel.app/)
+
 Tech Stack:
 - Nextjs
 - Typescript
